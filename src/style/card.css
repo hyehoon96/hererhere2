@@ -1,0 +1,13 @@
+.card-header,
+.card-body,
+.card-title,
+.card-text {
+  color: white;
+}
+
+.card-header {
+  background-color: var(--app-bar-color) !important;
+}
+.card-body {
+  background-color: var(--bg-color) !important;
+}

@@ -1,0 +1,34 @@
+/* src/theme.css */
+
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --info-color: #17a2b8;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+
+  /* dark theme custom */
+  --status-bar-color: #000000;
+  --app-bar-color: #212121;
+  --bg-color: #303030;
+  --card-color: #424242;
+}
+/* 전역 폰트 색상 설정 */
+body, html {
+  color: white !important;
+}
+
+/* 필요한 경우 React Bootstrap 컴포넌트의 스타일을 오버라이드 */
+/* .btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+} */
+
