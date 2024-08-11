@@ -1,27 +1,70 @@
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import SideDrawer from './components/SideDrawer'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 const { kakao } = window;
 
-function App() {
-  useEffect(() => {
-    const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-    const options = { //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-      level: 3 //지도의 레벨(확대, 축소 정도)
+function Map() {
+  const [map, setMap] = useState(null);
+  const [marker, setMarker] = useState(null);
+  const clickListenerRef = useRef(null);
+
+  const initializeMap = useCallback(() => {
+    const container = document.getElementById('map');
+    const options = {
+      center: new kakao.maps.LatLng(33.450701, 126.570667),
+      level: 3
     };
-    const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    const newMap = new kakao.maps.Map(container, options);
+    setMap(newMap);
   }, []);
+
+  const handleMapClick = useCallback((mouseEvent) => {
+    const latlng = mouseEvent.latLng;
+    
+    if(marker) {
+      marker.setMap(null);
+    }      
+    
+    const newMarker = new kakao.maps.Marker({ 
+      position: latlng,
+    });
+    
+    newMarker.setMap(map);
+    setMarker(newMarker);
+    console.log('Set Marker!!');
+  }, [map, marker]);
+
+  useEffect(() => {
+    initializeMap();
+  }, [initializeMap]);
+
+  useEffect(() => {
+    if (map) {
+      // 기존 이벤트 리스너 제거
+      if (clickListenerRef.current) {
+        kakao.maps.event.removeListener(map, 'click', clickListenerRef.current);
+      }
+
+      // 새 이벤트 리스너 등록
+      clickListenerRef.current = handleMapClick;
+      kakao.maps.event.addListener(map, 'click', clickListenerRef.current);
+    }
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      if (map && clickListenerRef.current) {
+        kakao.maps.event.removeListener(map, 'click', clickListenerRef.current);
+      }
+    };
+  }, [map, handleMapClick]);
 
   return (
     <div className="d-flex">
-      <SideDrawer></SideDrawer>
-      <div id="map" style={{width: '80vw', height: '100vh'}}></div>
+      <SideDrawer />
+      <div id="map" style={{width: '70vw', height: '100vh'}}></div>
     </div>
   );
 }
 
-export default App;
+export default Map;

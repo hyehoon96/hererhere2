@@ -5,6 +5,10 @@
   color: white;
 }
 
+.card {
+  min-width: 30vw;
+}
+
 .card-header {
   background-color: var(--app-bar-color) !important;
 }
