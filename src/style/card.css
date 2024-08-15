@@ -12,9 +12,21 @@
 }
 
 .card-header {
+  padding: 1.5rem;
   background-color: var(--app-bar-color) !important;
 }
 .card-body {
+  padding: unset;
+}
+
+.card-action-group{
+  background-color: var(--app-bar-color);
+  padding: 1rem;
+}
+
+.card-list-group {
+  max-height: 62.5vh;
+  overflow-y: scroll; 
 }
 
 .card-footer {
@@ -26,4 +38,36 @@
   color: white;
   border-color: var(--bg-color) !important;
   margin-top: 0.25rem;
+}
+
+.menu-group-button {
+  border-radius: 0;
+  background: var(--card-color);
+  border: black;
+  color: white;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 5px;
+}
+
+.active>.page-link, .page-link.active {
+  background-color: var(--info-color);
+  border-color: var(--info-color);
+}
+.page-item:not(:first-child) .page-link{
+  background-color: var(--card-color);
+  border-color: var(--card-color);
+  color: white;
+
+}
+.page-link {
+  margin: 0 5px;
+  border-radius: 50% !important;
+  width: 30px;
+  height: 30px;
+  text-align: center;
 }

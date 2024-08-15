@@ -10,7 +10,7 @@ function PlaceList({places}) {
             {item.address_name}
             <div>{item.category_name}</div>
           </div>
-          <Badge bg="primary" pill>{item.category_group_name}</Badge>
+          <Badge bg="info" pill>{item.category_group_name}</Badge>
         </ListGroup.Item>
       ))}
     </ListGroup>
