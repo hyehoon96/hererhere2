@@ -35,17 +35,6 @@ function Map() {
     console.log('Set Marker!!');
   }, [map, marker]);
 
-  const handleAddrSearch = (coords) => {
-    // 결과값으로 받은 위치를 마커로 표시합니다
-    var marker = new kakao.maps.Marker({
-      position: coords
-    });
-
-    marker.setMap(map);
-    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-    map.setCenter(coords);
-  }
-
   useEffect(() => {
     initializeMap();
   }, [initializeMap]);
@@ -70,7 +59,7 @@ function Map() {
     };
   }, [map, handleMapClick]);
 
-  const markAndSetCenter = (coords) => { 
+  const handleMark = (coords) => { 
     new kakao.maps.Marker({
       map: map,
       position: coords
@@ -79,9 +68,9 @@ function Map() {
   }
 
   return (
-    <div className="d-flex">
-      <SideDrawer handleAddressSearchMap={markAndSetCenter}/>
-      <div id="map" style={{width: '70vw', height: '100vh'}}></div>
+    <div className="d-flex h-100vh">
+      <SideDrawer onMark={handleMark}/>
+      <div id="map" style={{width: 'calc(100vw - 390px)', height: '100vh'}}></div>
     </div>
   );
 }

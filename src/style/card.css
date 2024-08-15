@@ -6,12 +6,24 @@
 }
 
 .card {
-  min-width: 30vw;
+  width : 390px;
+  background-color: var(--bg-color) !important;
+  border-radius: 0;
 }
 
 .card-header {
   background-color: var(--app-bar-color) !important;
 }
 .card-body {
-  background-color: var(--bg-color) !important;
+}
+
+.card-footer {
+  padding: 0;
+}
+
+.list-group-item {
+  background-color: var(--card-color) !important;
+  color: white;
+  border-color: var(--bg-color) !important;
+  margin-top: 0.25rem;
 }

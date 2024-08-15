@@ -21,6 +21,9 @@ body, html {
   color: white !important;
 }
 
+.h-100vh {
+  height: 100vh;
+}
 /* 필요한 경우 React Bootstrap 컴포넌트의 스타일을 오버라이드 */
 /* .btn-primary {
   background-color: var(--primary-color);

@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Map from './Map';
 import reportWebVitals from './reportWebVitals';
-
+import { Provider } from "react-redux";
+import store from './store/store.js'
 // styles
 import './style/theme.css';
 import './style/card.css';
@@ -10,7 +11,9 @@ import './style/card.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Map />
+    <Provider store={store}>
+      <Map />
+    </Provider>
   </React.StrictMode>
 );
 
