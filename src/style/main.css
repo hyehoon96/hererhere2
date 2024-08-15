@@ -15,6 +15,7 @@
   --app-bar-color: #212121;
   --bg-color: #303030;
   --card-color: #424242;
+  --modal-bg-color: #212529;
 }
 /* 전역 폰트 색상 설정 */
 body, html {
@@ -23,4 +24,8 @@ body, html {
 
 .h-100vh {
   height: 100vh;
+}
+
+.modal-content {
+  background-color: var(--modal-bg-color) !important;
 }
