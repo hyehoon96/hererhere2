@@ -1,24 +1,35 @@
-import { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { Pagination } from 'react-bootstrap';
 
+function PlacePagination({ pagination, onPageChange }) {
+  const items = useMemo(() => {
+    const tempItems = [];
+    for (let number = 1; number <= pagination.last; number++) {
+      tempItems.push(
+        <Pagination.Item 
+          onClick={() => pageChange(number)} 
+          key={number} 
+          active={number === pagination.current}
+        >
+          {number}
+        </Pagination.Item>
+      );
+    }
+    return tempItems;
+  }, [pagination.last, pagination.current, pagination.gotoPage]);
 
-function PlacePagination() {
-  let active = 2;
-  let items = [];
 
-  for (let number = 1; number <= 5; number++) {
-    items.push(
-      <Pagination.Item key={number} active={number === active}>
-        {number}
-      </Pagination.Item>
-    );
+  const pageChange = (page) => {
+    pagination.gotoPage(page);
+    onPageChange();
   }
-
   return (
     <div>
-      <Pagination size="sm">{items}</Pagination>
+      {items.length > 0 && (
+        <Pagination size="sm">{items}</Pagination>
+      )}
     </div>
   );
 }
 
-export default PlacePagination;
+export default React.memo(PlacePagination);

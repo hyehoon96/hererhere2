@@ -3,7 +3,7 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 
 const { kakao } = window;
 
-function PlaceSearch({ onSearch }) {
+function PlaceSearch({ onSearch, onPagination }) {
   const [ps, setPs] = useState(null);
   const [geocoder, setGeocoder] = useState(null);
   const [searchWord, setSearchWord] = useState('');
@@ -22,9 +22,10 @@ function PlaceSearch({ onSearch }) {
     }
   }
 
-  const placeSearchCB = (data, status) => {
+  const placeSearchCB = (data, status, pagination) => {
     if (status === kakao.maps.services.Status.OK) {
       onSearch(data);
+      onPagination(pagination);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       geocoder.addressSearch(searchWord, addressSearchCB)
     } else if (status === kakao.maps.services.Status.ERROR) {

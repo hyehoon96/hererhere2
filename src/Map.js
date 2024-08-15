@@ -6,7 +6,10 @@ const { kakao } = window;
 
 function Map() {
   const [map, setMap] = useState(null);
-  const [marker, setMarker] = useState(null);
+  /**현재 지도 위 마커를 담고 있는 배열 */
+  const [markers, setMarkers] = useState([]);
+  /**선택된 마커 */
+  const [currentMarker, setcurrentMarker] = useState(null);
   const clickListenerRef = useRef(null);
 
   const initializeMap = useCallback(() => {
@@ -22,18 +25,18 @@ function Map() {
   const handleMapClick = useCallback((mouseEvent) => {
     const latlng = mouseEvent.latLng;
     
-    if(marker) {
-      marker.setMap(null);
+    if(currentMarker) {
+      currentMarker.setMap(null);
     }      
     
-    const newMarker = new kakao.maps.Marker({ 
+    const newcurrentMarker = new kakao.maps.Marker({ 
       position: latlng,
     });
     
-    newMarker.setMap(map);
-    setMarker(newMarker);
-    console.log('Set Marker!!');
-  }, [map, marker]);
+    newcurrentMarker.setMap(map);
+    setcurrentMarker(newcurrentMarker);
+    console.log('Set currentMarker!!');
+  }, [map, currentMarker]);
 
   useEffect(() => {
     initializeMap();
@@ -59,17 +62,51 @@ function Map() {
     };
   }, [map, handleMapClick]);
 
-  const handleMark = (coords) => { 
-    new kakao.maps.Marker({
-      map: map,
+  const displayPlace = (places) => {
+    if(!Array.isArray(places)) {
+      return
+    }
+    removeMarker();
+    console.log(places);
+    const bounds = new kakao.maps.LatLngBounds();
+    const tempMarkers = [];
+
+    for(const place of places) {
+      const placePosition = new kakao.maps.LatLng(place.y, place.x);
+      const marker = addMarker(placePosition) ;
+      tempMarkers.push(marker);
+      bounds.extend(placePosition);
+    }
+
+    setMarkers(tempMarkers);
+    map.setBounds(bounds);
+  }
+
+  /**마커 핸들링 */
+  const removeMarker = (paramMarker) => {
+    if (paramMarker) {
+      // 해당 마커만 remove
+      return
+    }
+    for (const marker of markers) {
+      marker.setMap(null);
+    }
+    setMarkers([]);
+  }
+
+  const addMarker = (coords) => { 
+    const marker = new kakao.maps.Marker({
       position: coords
     });
+    
+    marker.setMap(map);
     map.setCenter(coords);
+    return marker
   }
 
   return (
     <div className="d-flex h-100vh">
-      <SideDrawer onMark={handleMark}/>
+      <SideDrawer onMark={addMarker} onPlaces={displayPlace} removeMarker={removeMarker}/>
       <div id="map" style={{width: 'calc(100vw - 390px)', height: '100vh'}}></div>
     </div>
   );

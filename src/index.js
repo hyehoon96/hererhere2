@@ -5,9 +5,8 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import store from './store/store.js'
 // styles
-import './style/theme.css';
+import './style/main.css';
 import './style/card.css';
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

@@ -4,26 +4,35 @@ import PlaceSearch from './common/PlaceSearch'
 import PlaceList from './common/PlaceList';
 import PlacePagination from './common/PlacePagination';
 
-const { kakao } = window;
-
-function SideDrawer({onMark}) {
-  const [searchResult, setSearchResult] = useState([]);
+function SideDrawer({onMark, onPlaces, removeMarker }) {
+  const [places, setPlaces] = useState([]);
+  const [pagination, setPagination] = useState({});
 
   const handleSearch = (data) => {
     if(Array.isArray(data)) {
-      setSearchResult(data);
-      console.log(data);
+      console.log('handleSearch!');
+      setPlaces(data);
+      onPlaces(data);
     } else {
+      console.log(data);
       onMark(data);
     }
   }
-  
+
+  const handlePagination = (data) => {
+    setPagination(data);
+  }
+
+  const handlePageChange = (data) => {
+    removeMarker();
+  }
+
   return (
     <>
       <PlaceCard
-        searchComponent={<PlaceSearch onSearch={handleSearch} />}
-        listComponent={<PlaceList places={searchResult}/>}
-        paginationComponent={<PlacePagination />}
+        searchComponent={<PlaceSearch onSearch={handleSearch} onPagination={handlePagination}/>}
+        listComponent={<PlaceList places={places}/>}
+        paginationComponent={<PlacePagination pagination={pagination} onPageChange={handlePageChange}/>}
       /> 
     </>
   );
