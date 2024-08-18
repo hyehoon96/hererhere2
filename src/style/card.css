@@ -55,10 +55,10 @@
 }
 
 .active>.page-link, .page-link.active {
-  background-color: var(--info-color);
-  border-color: var(--info-color);
+  background-color: var(--info-color) !important;
+  border-color: var(--info-color) !important;
 }
-.page-item:not(:first-child) .page-link{
+.page-item .page-link{
   background-color: var(--card-color);
   border-color: var(--card-color);
   color: white;

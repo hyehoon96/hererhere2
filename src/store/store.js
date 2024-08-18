@@ -1,12 +1,12 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
+import chatReducer from './slices/chatSlice.js';
+import mapReducer from './slices/mapSlice.js'
 
-let user = createSlice({
-  name : 'user',
-  initialState : 'kim'
-})
-
-export default configureStore({
+export const store = configureStore({
   reducer: {
-    user : user.reducer
-  }
-}) 
+    chat: chatReducer,
+    map: mapReducer
+  },
+});
+
+export default store;

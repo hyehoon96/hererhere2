@@ -1,5 +1,5 @@
 import { Card, Button, ToggleButtonGroup, ToggleButton  } from 'react-bootstrap';
-import CustomModal from '../menu/CustomModal';
+import CustomModal from '../chat/ChatModal';
 import { useState } from 'react';
 
 function PlaceCard({ searchComponent, listComponent, paginationComponent }) {
