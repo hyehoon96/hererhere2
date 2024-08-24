@@ -1,13 +1,17 @@
 import { Card, Button, ToggleButtonGroup, ToggleButton  } from 'react-bootstrap';
 import CustomModal from '../chat/ChatModal';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { calcCenterPoint } from '../../store/slices/placeSlice';
+
 
 function PlaceCard({ searchComponent, listComponent, paginationComponent }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState(null);
+  const dispatch = useDispatch();
+
 
   const openModal = (item) => {
-    console.log('modal 버튼 클릭!!');
     setIsModalOpen(true);
     setModalType(item);
   }
@@ -24,7 +28,12 @@ function PlaceCard({ searchComponent, listComponent, paginationComponent }) {
                 {
                   ['채팅방 찾기', '채팅방 만들기', '오류 제보'].map( (item, index) => {
                     return (  
-                      <ToggleButton key={index} className="menu-group-button" id={`tbg-radio-${index+1}`} value={index+1} onClick={() => openModal(item)}>
+                      <ToggleButton 
+                        key={index} 
+                        className="menu-group-button"
+                        id={`tbg-radio-${index+1}`} 
+                        value={index+1} 
+                        onClick={() => openModal(item)}>
                         {item}
                       </ToggleButton>
                     ) 
@@ -41,7 +50,7 @@ function PlaceCard({ searchComponent, listComponent, paginationComponent }) {
         </Card.Body>
         <div className="card-footer d-grid">
           {paginationComponent}
-          <Button style={{borderRadius: '0'}} variant="info" size="md">Go somewhere</Button>
+          <Button style={{borderRadius: '0'}} variant="info" size="md" onClick={() => {dispatch(calcCenterPoint())}}>Go somewhere</Button>
         </div>
       </Card>
       <CustomModal isModalOpen={isModalOpen} modalType={modalType} setIsModalOpen={setIsModalOpen}/>

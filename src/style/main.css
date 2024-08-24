@@ -20,6 +20,7 @@
 /* 전역 폰트 색상 설정 */
 body, html {
   color: white !important;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 .h-100vh {

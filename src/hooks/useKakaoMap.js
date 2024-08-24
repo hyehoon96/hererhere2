@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 const { kakao } = window;
 
@@ -7,6 +8,7 @@ function useKakaoMap() {
   const [map, setMap] = useState(null);
   const [currentMarker, setCurrentMarker] = useState(null);
   const removeMarkerRef = useRef(null);
+  const $centerPoint = useSelector(state => state.place.centerPoint);
 
   const initializeMap = useCallback(() => {
     const container = document.getElementById('map');
@@ -64,6 +66,16 @@ function useKakaoMap() {
 
     map.setBounds(bounds);
   }, [map, addNewMarker]);
+
+  // centerPoint가 변경될 때마다 실행될 효과
+  useEffect(() => {
+    console.log('바껴부렀스');
+    if (map && $centerPoint?.x && $centerPoint?.y) {
+      const newCenter = new kakao.maps.LatLng($centerPoint.y, $centerPoint.x);
+      map.setCenter(newCenter);
+      console.log("셋쎈터");
+    }
+  }, [map, $centerPoint]);
 
   return { 
     map, 
