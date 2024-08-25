@@ -50,7 +50,7 @@ function PlaceCard({ searchComponent, listComponent, paginationComponent }) {
         </Card.Body>
         <div className="card-footer d-grid">
           {paginationComponent}
-          <Button style={{borderRadius: '0'}} variant="info" size="md" onClick={() => {dispatch(calcCenterPoint())}}>Go somewhere</Button>
+          <Button style={{borderRadius: '0'}} variant="primary" size="md" onClick={() => {dispatch(calcCenterPoint())}}>Go somewhere</Button>
         </div>
       </Card>
       <CustomModal isModalOpen={isModalOpen} modalType={modalType} setIsModalOpen={setIsModalOpen}/>

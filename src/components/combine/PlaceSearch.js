@@ -50,7 +50,7 @@ function PlaceSearch({ onSearch, onSendingPageObj }) {
           value={searchWord}
           onChange={(e) => setSearchWord(e.target.value)}
         />
-        <Button variant="info" id="button-addon2" type="submit">@</Button>
+        <Button variant="primary" id="button-addon2" type="submit">@</Button>
       </InputGroup>
     </Form>
   );

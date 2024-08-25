@@ -1,8 +1,8 @@
 /* src/theme.css */
 
 :root {
-  --primary-color: #007bff;
-  --secondary-color: #6c757d;
+  --primary-color: #712cf9;
+  --secondary-color: rgb(255, 121, 198);
   --success-color: #28a745;
   --info-color: #17a2b8;
   --warning-color: #ffc107;
@@ -16,11 +16,45 @@
   --bg-color: #303030;
   --card-color: #424242;
   --modal-bg-color: #212529;
+  --prism-background-color: #282A36;
+  --placeholder-color: #aeb2ad;
 }
 /* 전역 폰트 색상 설정 */
 body, html {
   color: white !important;
   font-family: Helvetica, Arial, sans-serif;
+}
+
+details {
+
+}
+summary {
+  list-style-type: circle; 
+}
+
+details[open] {
+
+}
+details[open] summary {
+  
+}
+.form-control {
+  background-color: var(--bg-color);
+}
+
+input::placeholder {
+  color: var(--placeholder-color) !important; /* 변수를 사용하여 색상 설정 */
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-group>.btn-check:checked+.btn {
+  background-color: var(--prism-background-color);
+  border-color: var(--prism-background-color);
+  color: var(--secondary-color);
 }
 
 .h-100vh {

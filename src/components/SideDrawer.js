@@ -36,7 +36,7 @@ function SideDrawer({onMark, onPlaces, removeAllMarker }) {
         <div>{item.category_name}</div>
       </div>
       <div className="d-flex flex-column justify-content-end" style={{ width: 'auto' }}>
-        <Badge bg="info" pill style={{ height: 'fit-content', fontSize: '13px' }}>{item.category_group_name}</Badge>
+        <Badge bg="primary" pill style={{ height: 'fit-content', fontSize: '13px' }}>{item.category_group_name}</Badge>
         <Badge bg="secondary" pill style={{ height: 'fit-content', fontSize: '13px', marginTop: '10px' }}
           onClick={() => { dispatch(addPlacesWithLogging({x:item.x, y:item.y})) }}
         >출발지 담기</Badge>

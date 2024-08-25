@@ -26,10 +26,12 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
 
       if (snapshot.exists()) {
         const roomsData = snapshot.val();
+        console.log(roomsData);
         const roomsList = Object.keys(roomsData).map(roomId => ({
           id: roomId,
           ...roomsData[roomId].info, // 각 방의 info 정보 가져오기
         }));
+        console.log(roomsList);
         setRooms(roomsList);
       } else {
         console.log("No rooms found.");
@@ -41,6 +43,7 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
 
 
   const handleClose = () => {
+    console.log("handleClose");
     setShow(false);
     setIsModalOpen(false);
   };
@@ -48,7 +51,7 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
   const enterChatRoom = (room) => {
     // Redux에 채팅방 정보 저장
     dispatch(enterRoom(room));
-    handleClose();
+    // handleClose();
     // 채팅방 UI 렌더링
   }
   const renderModalContent = () => {
@@ -58,7 +61,12 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
           {
             rooms.map(room => (
               <ListGroup.Item key={room.id} action onClick={() => enterChatRoom(room)}>
-                {room.title}
+                <details>
+                  <summary>{room.title}</summary>
+                  <Form.Group className="mt-3" controlId="formChatRoomDesc">
+                    <Form.Control type="password" placeholder="비밀번호를 입력하세요." />
+                  </Form.Group>
+                </details>
               </ListGroup.Item>
             ))
           }
@@ -93,15 +101,23 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
           </Modal.Body>
           {
             
-            <Modal.Footer>    
-              <Button variant="secondary" onClick={handleClose}>
-                닫기
-              </Button>
+            <Modal.Footer>
+              {    
+                <Button variant="secondary" onClick={handleClose}>
+                  닫기
+                </Button>
+              }
+              {    
+                modalType === '채팅방 찾기' &&
+                <Button variant="primary" onClick={handleClose}>
+                  접속
+                </Button>
+              }
               {
-              modalType === '채팅방 만들기' &&
-              <Button variant="primary" onClick={handleClose}>
-                생성
-              </Button>
+                modalType === '채팅방 만들기' &&
+                <Button variant="primary" onClick={handleClose}>
+                  생성
+                </Button>
               } 
             </Modal.Footer>
           }
