@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import PlaceCard from './place/PlaceCard';
-import PlaceSearch from './place/PlaceSearch'
+import PlaceCard from './combine/PlaceCard';
+import PlaceSearch from './combine/PlaceSearch'
 import CommonList from './common/CommonList';
 import CommonPagination from './common/CommonPagination';
 import { Button, Badge, Pagination } from 'react-bootstrap';

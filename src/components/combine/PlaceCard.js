@@ -1,5 +1,5 @@
 import { Card, Button, ToggleButtonGroup, ToggleButton  } from 'react-bootstrap';
-import CustomModal from '../chat/ChatModal';
+import CustomModal from '../feature/chat/ChatModal';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { calcCenterPoint } from '../../store/slices/placeSlice';
