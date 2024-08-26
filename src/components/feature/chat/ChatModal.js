@@ -5,9 +5,12 @@ import { enterRoom, setRooms } from '../../../store/slices/chatSlice.js';
 import { database } from '../../../firebase.js';
 import { ref, get, push, set } from "firebase/database";
 import { serverTimestamp } from "firebase/database";
+import { useChat } from '../../../hooks/useChat.js';  // 새로 추가된 import
 
 function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
   const dispatch = useDispatch();
+  const { enterChatRoom } = useChat();  // 커스텀 훅 사용
+
   /** Modal 상태 */
   const [show, setShow] = useState(false);
 
@@ -22,6 +25,11 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
   const [newRoomTitle, setNewRoomTitle] = useState('');
   const [newRoomPw, setNewRoomPw] = useState('');
   const [newRoomAlias, setNewRoomAlias] = useState('');
+  /** 채팅방 접속 시 채팅방정보 */
+  const [passwords, setPasswords] = useState({});
+  const [selectedRoom, setSelectedRoom] = useState(null);
+
+
 
   useEffect(() => {
     // 채팅방 목록 받아올 것
@@ -69,12 +77,46 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
     setPwLength(0);
 
   }
-  const enterChatRoom = (room) => {
-    // Redux에 채팅방 정보 저장
-    dispatch(enterRoom(room));
-    // handleClose();
-    // 채팅방 UI 렌더링
-  }
+
+  const checkPw = async (room) => {
+    try {
+      const roomRef = ref(database, `rooms/${room.id}`);
+      const snapshot = await get(roomRef);
+
+      if (snapshot.exists()) {
+        const roomData = snapshot.val();
+        if (roomData.info.password === passwords[room.id]) {
+          enterChatRoom(room);
+          handleClose();
+        } else {
+          alert("비밀번호가 일치하지 않습니다.");
+        }
+      } else {
+        console.log("Room not found.");
+        alert("채팅방을 찾을 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("Error checking password:", error);
+      alert("비밀번호 확인 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleEnterChatRoom = () => {
+    if (selectedRoom) {
+      if (selectedRoom.hasPassword) {
+        checkPw(selectedRoom);
+      } else {
+        enterChatRoom(selectedRoom);
+        handleClose();
+      }
+    } else {
+      alert("채팅방을 선택해주세요.");
+    }
+  };
+
+  const handlePasswordChange = (roomId, password) => {
+    setPasswords(prev => ({ ...prev, [roomId]: password }));
+  };
 
   const checkInputLength = (e, type, maximum) => {
     const value = e.target.value;
@@ -96,6 +138,13 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
       }
     }
   };
+
+  const handleRoomListClick = (room) => {
+    setSelectedRoom(room)
+    if(!room.hasPassword) {
+      enterChatRoom(room);
+    }
+  }
 
   const createChatRoom = async () => {
     try {
@@ -149,36 +198,47 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
     if (modalType === '채팅방 찾기') {
       return (
         <ListGroup>
-          {
-            rooms.map(room => (
-              <ListGroup.Item key={room.id} action onClick={() => enterChatRoom(room)}>
-                <details>
-                  <summary>
+          {rooms.map(room => (
+            <ListGroup.Item 
+              key={room.id} 
+              action 
+              onClick={() => handleRoomListClick(room)}
+              active={selectedRoom && selectedRoom.id === room.id}
+            >
+              <details>
+                <summary>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    width: '100%'
+                  }}>
+                    <span>{room.title} {room.hasPassword && <span>🔒</span>}</span>
                     <div style={{
                       display: 'flex',
-                      justifyContent: 'space-between',
                       alignItems: 'center',
-                      width: '100%'
+                      gap: '8px'
                     }}>
-                      <span>{room.title} {room.hasPassword && <span>🔒</span>}</span>
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px'
-                      }}>
-                        <Badge bg="primary" pill style={{ height: 'fit-content', fontSize: '13px' }}>
-                          {room.curUsers} / {room.maxUsers}
-                        </Badge>
-                      </div>
+                      <Badge bg="primary" pill style={{ height: 'fit-content', fontSize: '13px' }}>
+                        {room.curUsers} / {room.maxUsers}
+                      </Badge>
                     </div>
-                  </summary>
-                  <Form.Group className="mt-3" controlId="formChatRoomDesc">
-                    <Form.Control type="password" placeholder="비밀번호를 입력하세요." />
+                  </div>
+                </summary>
+                {room.hasPassword && (
+                  <Form.Group className="mt-3" controlId={`formChatRoomDesc-${room.id}`}>
+                    <Form.Control 
+                      type="password"
+                      placeholder="비밀번호를 입력하세요."
+                      value={passwords[room.id] || ''} 
+                      onChange={e => handlePasswordChange(room.id, e.target.value)}
+                      onClick={e => e.stopPropagation()}
+                    />
                   </Form.Group>
-                </details>
-              </ListGroup.Item>
-            ))
-          }
+                )}
+              </details>
+            </ListGroup.Item>
+          ))}
         </ListGroup>
       );
     } else if (modalType === '채팅방 만들기') {
@@ -225,38 +285,29 @@ function CustomModal({isModalOpen, modalType, setIsModalOpen}) {
   };
   return (
     <>
-      { 
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title> 채팅방 </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {renderModalContent()}
-          </Modal.Body>
-          {
-            
-            <Modal.Footer>
-              {    
-                <Button variant="secondary" onClick={handleClose}>
-                  닫기
-                </Button>
-              }
-              {    
-                modalType === '채팅방 찾기' &&
-                <Button variant="primary" onClick={handleClose}>
-                  접속
-                </Button>
-              }
-              {
-                modalType === '채팅방 만들기' &&
-                <Button variant="primary" onClick={createChatRoom}>
-                  생성
-                </Button>
-              } 
-            </Modal.Footer>
-          }
-        </Modal>
-      }
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title> 채팅방 </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {renderModalContent()}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            닫기
+          </Button>
+          {modalType === '채팅방 찾기' && (
+            <Button variant="primary" onClick={handleEnterChatRoom}>
+              접속
+            </Button>
+          )}
+          {modalType === '채팅방 만들기' && (
+            <Button variant="primary" onClick={createChatRoom}>
+              생성
+            </Button>
+          )}
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

@@ -4,15 +4,20 @@ import Map from './Map';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import store from './store/store.js'
+import { BrowserRouter } from 'react-router-dom';
+
+
 // styles
 import './style/main.css';
 import './style/card.css';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <Map />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <Map />
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
