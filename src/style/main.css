@@ -29,7 +29,7 @@ details {
 
 }
 summary {
-  list-style-type: circle; 
+  list-style-type: none; 
 }
 
 details[open] {
@@ -40,6 +40,10 @@ details[open] summary {
 }
 .form-control {
   background-color: var(--bg-color);
+  color: white;
+}
+.form-label {
+  font-weight: bold;
 }
 
 input::placeholder {
